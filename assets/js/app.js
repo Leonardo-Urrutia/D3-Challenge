@@ -3,14 +3,14 @@ var svgArea = d3.select("#scatter").select("svg");
 
 // SVG wrapper dimensions are determined by the current width and
 // height of the browser window.
-var svgWidth = 800;
+var svgWidth = 860;
 var svgHeight = 800;
 
 var margin = {
     top: 50,
-    bottom: 50,
+    bottom: 80,
     right: 50,
-    left: 50
+    left: 80
 };
 
 var height = svgHeight - margin.top - margin.bottom;
@@ -50,7 +50,7 @@ d3.csv("assets/data/data.csv").then(function (censusData) {
         .range([height, 0]);
 
     var xAgeAxis = d3.axisBottom(xAgeLinearScale);
-    var ySmokeAxis = d3.axisLeft(ySmokeLinearScale).ticks(6);
+    var ySmokeAxis = d3.axisLeft(ySmokeLinearScale).ticks(10);
 
     // append axes
     scatterGroup.append("g")
@@ -68,6 +68,35 @@ d3.csv("assets/data/data.csv").then(function (censusData) {
         .append("circle")
         .attr("cx", d => xAgeLinearScale(d.age))
         .attr("cy", d => ySmokeLinearScale(d.smokes))
-        .attr("r", 7.5)
+        .attr("r", 15)
         .style("fill", "#69b3a2")
+
+
+    scatterGroup.selectAll("dot")
+        .data(censusData)
+        .enter()
+        .append("text")
+        .classed("stateText", true)
+        .text(d => d.abbr)
+        .attr("x", d => xAgeLinearScale(d.age))
+        .attr("y", d => ySmokeLinearScale(d.smokes - .22))
+    
+
+    // x axis title
+    scatterGroup.append("text")
+    .attr("transform", `translate(${width / 2}, ${height + margin.top + 20})`)
+    .text("Age (Median)")
+    .classed("aText", true)
+
+    scatterGroup.append("text")
+    // this rotation makes things weird!
+    // x and y placements will seem transposed.
+    .attr("transform", "rotate(-90)")
+    .attr("x", 0-height/2)
+    .attr("y", 0-margin.left)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .classed("atext", true)
+    .text("Smokers (%)"); 
+  
 });
