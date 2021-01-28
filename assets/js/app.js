@@ -91,8 +91,9 @@ d3.csv("assets/data/data.csv").then(function (censusData) {
     // x axis title
     scatterGroup.append("text")
     .attr("transform", `translate(${width / 2}, ${height + margin.top + 20})`)
-    .text("Age (Median)")
     .classed("aText", true)
+    .text("Age (Median)")
+    
 
     // y axis title
     scatterGroup.append("text")
