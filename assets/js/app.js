@@ -41,12 +41,18 @@ d3.csv("assets/data/data.csv").then(function (censusData) {
 
     console.log(censusData);
 
+    xDomain = d3.extent(censusData, d => d.age)
+    xDomain[0] = xDomain[0] - 2
+    xDomain[1] = xDomain[1] + 4
+
+    console.log(xDomain);
+
     var xAgeLinearScale = d3.scaleLinear()
-        .domain(d3.extent(censusData, d => d.age))
+        .domain(xDomain)
         .range([0, width]);
 
     var ySmokeLinearScale = d3.scaleLinear()
-        .domain([0, d3.max(censusData, d => d.smokes)])
+        .domain([6, d3.max(censusData, d => d.smokes) + 5])
         .range([height, 0]);
 
     var xAgeAxis = d3.axisBottom(xAgeLinearScale);
@@ -88,9 +94,8 @@ d3.csv("assets/data/data.csv").then(function (censusData) {
     .text("Age (Median)")
     .classed("aText", true)
 
+    // y axis title
     scatterGroup.append("text")
-    // this rotation makes things weird!
-    // x and y placements will seem transposed.
     .attr("transform", "rotate(-90)")
     .attr("x", 0-height/2)
     .attr("y", 0-margin.left)
